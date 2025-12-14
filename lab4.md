@@ -848,7 +848,7 @@ test/test-utils/run_test.sh <ns3_path> <test_name>
 * Exercise 4 (cwnd)：
   在判断两个 cwnd trace 文件是否相同时，我们只会比对其中记录的 cwnd 最大值以及第一次达到 cwnd 最大值时的时间戳，并且允许 10% 的误差。
 * Exercise 5 (fct)：
-  在判断两个 fct 输出是否相同时，我们会比对你的输出与标准答案输出的 fct 数值，并且允许 5% 的相对误差 或 1s 的绝对误差。【补注：允许的误差范围以本文档中说的为准，不以 starter code 仓库的 `README.md` 和 `test/test-utils/README.md` 中写得有误】
+  在判断两个 fct 输出是否相同时，我们会比对你的输出与标准答案输出的 fct 数值，并且允许 5% 的相对误差 或 1s 的绝对误差。
 
 #### 其它补充
 
