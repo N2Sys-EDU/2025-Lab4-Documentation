@@ -23,11 +23,11 @@ lab4 的主要目的在于让大家了解 ns-3 的基本用法。因而，你的
 - 安全性和可控性：在真实网络中测试新协议或技术可能会引发不可预知的问题，而模拟器能够在安全、可控的环境中运行实验，避免对现实网络造成影响。
 - 可重复性和可比性：通过网络模拟器，可以对同一实验进行多次运行，获取一致的结果，便于验证实验的准确性，并与其他研究进行对比。
 
-现存的网络模拟器有很多，各有各的特点。其中，使用十分广泛的一类就是*基于离散事件的网络模拟器*。我们在本 lab 中将要使用的 ns-3 一个知名的离散事件模拟器。在这类模拟器中，每个网络事件（如数据包的发送、接收、丢失等）会被分配一个时间戳，模拟器按照时间戳的先后顺序逐一处理事件，从而描绘出网络系统的动态运行过程。
+现存的网络模拟器有很多，各有各的特点。其中，使用十分广泛的一类就是*基于离散事件的网络模拟器*。我们在本 lab 中将要使用的 ns-3 就是一个知名的离散事件模拟器。在这类模拟器中，每个网络事件（如数据包的发送、接收、丢失等）会被分配一个时间戳，模拟器按照时间戳的先后顺序逐一处理事件，从而描绘出网络系统的动态运行过程。
 
 ### 什么是 ns-3 ？
 
-ns-3（Network Simulator 3）是一款开源的离散事件网络模拟器，专为研究和开发网络协议而设计。与其前身 ns-2 相比，ns-3 提供了更现代化和模块化的架构，支持更复杂的网络模型和仿真场景。ns-3 可以用于模拟各种网络协议、网络拓扑以及应用程序，广泛应用于学术研究、工程开发以及教育领域。
+ns-3（Network Simulator 3）是一款开源的离散事件网络模拟器，专为研究和开发网络协议而设计。与其前身 ns-2 相比，ns-3 提供了更现代化和模块化的架构，支持更复杂的网络模型和仿真场景。ns-3 可以用于模拟各种网络协议、网络拓扑以及应用程序，广泛应用于学术研究、工程开发以及教育领域。例如，在知名的分布式AI系统模拟器 [ASTRA-sim](https://github.com/astra-sim/astra-sim) 中，就可以选择使用 ns-3 作为网络API的模拟后端。
 
 本 lab 的文档会介绍所有完成本 lab 需要的 ns-3 知识。如果你对本 lab 的内容感到不满足的话，可以继续学习 [ns-3 的官方教程](https://www.nsnam.org/docs/tutorial/html/) 。
 
@@ -60,6 +60,9 @@ ns-3 还提供了丰富的仿真模型，包括无线和有线网络、移动网
    ./ns3 configure --enable-examples --enable-tests
    ./ns3 build -j $(nproc)
    ```
+
+   使用某些C++编译器可能会导致编译过程报错（例如，助教发现使用`g++-13`编译就会导致一些报错）。如果你遇到这样的问题，可以尝试换一个编译器。助教已经检验过，`g++-11`是可以顺利完成编译的（课程下发的镜像中使用的就是`g++-11`）。如果需要的话，你可以使用 `sudo apt install gcc-11 g++-11` 或其他方法来下载它，然后在configure时通过设置环境变量来指定使用`g++-11`（例如 `CC=gcc-11 CXX=g++-11 ./ns3 configure --enable-examples --enable-tests`）。
+
 3. 测试编译的正确性。
 
    编译完成后，可以运行示例以验证编译成功。可以运行以下命令测试 ns-3 的实例：
@@ -596,7 +599,7 @@ main (int argc, char *argv[])
 
 **Config Path**
 
-ns-3 中的每个 TraceSource 都有一个自己的属性路径（Config Path)，例如：
+ns-3 中的每个 TraceSource 都有一个自己的属性路径 (Config Path)，例如：
 
 ```
 /NodeList/7/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow
@@ -710,9 +713,9 @@ student@327fb651b54a:~/workspace/ns-allinone-3.38/ns-3.38$ cat lv1-results/cwnd/
 
 FCT 指的是一条流从开始发送到结束所经过的时间。具体而言，对于一条流，你可以用“这条流的最后一个 ACK 报文返回到发送方的时间”减去“这条流开始的时间”来得到其 FCT。这里的“最后一个 ACK 报文”指的就是在四次挥手阶段从接收方返回发送方的 ACK 报文，如果你用 `tcpdump` 查看 Exercise 3 的输出文件的话，看到的最后一个发往流的发送方的报文就是这个报文。
 
-你的程序需要把测出的两条流的 FCT 输出到 `lv1-results/fct/fct.dat` 中，输出含两行，每行一个整数，第一行为 `flow_0` 的 FCT，第二行为 `flow_1` 的 FCT。
+你的程序需要把测出的两条流的 FCT 输出到 `lv1-results/fct/fct.dat` 中，输出含两行，每行一个整数，第一行为 `flow_0` 的 FCT，第二行为 `flow_1` 的 FCT。结果以微秒为单位。
 
-下面是一些你会需要用到的提示：
+下面是一些你可能会用到的提示：
 
 1. `ApplicationContainer::Get()` 方法的放回值类型是 `Ptr<Application>` 而非 `Ptr<BulkSendApplication>` 。如果你需要的话，你可以用如下面第三行的方法来获得 `Ptr<BulkSendApplication>` 类型的值
 
@@ -722,11 +725,11 @@ ApplicationContainer app = bulk_helper.Install(node);
 Ptr<BulkSendApplication> bulk_app = app.Get(0)->GetObject<BulkSendApplication>()
 ```
 
-2. 在我们的模拟场景中，你可以通过 `BulkSendApplication::GetSocket()` 得到发包应用所使用的 socket，其返回值是 `TcpSocketBase` 类型的。虽然 ns-3 中并没有哪个现存的 TraceSource 是直接用于在 socket 关闭时输出信息的，但是你可以巧妙地使用 `TcpSocketBase` 的 `Rx` 这一 TraceSource 来达成测量 FCT 的目的。你可以在 `src/internet/model/tcp-socket-base.{h,cc}` 中找到 `TcpSocketBase` 的具体实现
+2. 在我们的模拟场景中，你可以通过 `BulkSendApplication::GetSocket()` 得到发包应用所使用的 socket，其返回值是 `TcpSocketBase` 类型的。虽然 ns-3 中并没有哪个现存的 TraceSource 是直接用于在 socket 关闭时输出信息的，但是你可以巧妙地使用 `TcpSocketBase` 的 `Rx` 这一 TraceSource 来达成测量 FCT 的目的。你可以在 `src/internet/model/tcp-socket-base.{h,cc}` 中找到 `TcpSocketBase` 的具体实现。你可以直接使用类似 `app->GetSocket()->TraceConnectWithoutContext("Rx", MakeBoundCallback(&TraceSink, /*其他参数*/));` 的方法来进行绑定，其中 `app` 是通过 `sourceApps.Get(0)->GetObject<BulkSendApplication>()` 获得的 `Ptr<BulkSendApplication>` 类型的指针。虽然 `BulkSendApplication::GetSocket()` 获得的 `m_socket` 成员变量的类型定义是 `Ptr<Socket>` ，但是由于 `TcpSocketBase` 与 `Socket` 间的继承关系，所以在调用 `app->GetSocket()->TraceConnectWithoutContext()` 时可以连接到 `TcpSocketBase` 里的属性（具体的原理在此不介绍了）
 3. 别忘了，就像 Exercise 4 中一样，创建 Tracing 连接需要在应用开始之后进行，否则 ns-3 可能会访问到一个不存在的 socket
-4. ns-3 中的 `Time` 类型可以直接进行加减运算，并且对于 `Time` 类型的对象你可以使用  `GetMicroSeconds()` 方法来获得这一时间以微秒为单位的表示，返回值的类型为 `int64_t`。例如， `Simulator::Now().GetMicroSeconds()` 就会返回以微秒为单位的当前模拟器时间
-5. 新增提示：获取流的发送方的 socket 接收到最后一个报文的时间戳其实非常非常简单。其实助教设想的使用 `Rx` 这一 TraceSource 的做法中，根本没用到最后一个报文的内容具体是什么
-6. 新增说明：再计算 FCT 时，你应该直接把 `startTime` （也就是 10.0s） 作为流的开始时间
+4. ns-3 中的 `Time` 类型可以直接进行加减运算，并且对于 `Time` 类型的对象你可以使用  `GetMicroSeconds()` 方法来获得这一时间以微秒为单位的表示，返回值的类型为 `int64_t`。例如， `Simulator::Now().GetMicroSeconds()` 就会返回以微秒为单位的当前模拟器时间。
+5. 如果使用 `Rx` 这一 TraceSource 的话，获取流的发送方的 socket 接收到最后一个报文的时间戳其实很简单
+6. 说明：在计算 FCT 时，你应该直接把 `startTime` （也就是 10.0s） 作为流的开始时间。**算FCT时千万别忘了减去startTime**
 
 如果一切顺利，你运行修改后的 `dumbbell.cc` 应该可以获得如下的输出：
 
@@ -832,15 +835,13 @@ test/test-utils/run_test.sh <ns3_path> <test_name>
 
 举例而言，`test/test-utils/run_test.sh /home/student/workspace/ns-allinone-3.38/ns-3.38 cwnd` 可用于单独测试 Exercise 4 (cwnd)，`test/test-utils/run_test.sh /home/student/workspace/ns-allinone-3.38/ns-3.38 all` 可用于测试所有需要测试的三个 Exercise (pcap, cwnd, fct) 。具体的用法描述可以参见 `README.md` 和 `test/test-utils/README.md` 。
 
-【补注：在 starter code 仓库的 `README.md` 和 `test/test-utils/README.md` 中，在举例介绍评测脚本运行方式的时候，把运行参数中的 `ns3_path` 打错了。请同学们以本文档的例子为准，运行脚本的第一个参数务必要写的是 `ns-3.38` 这一目录的绝对路径。】
-
 #### 评测脚本的逻辑
 
 下面我们特别介绍一下我们使用的评测脚本的逻辑。
 
-> 其实，同学们如果顺利按照第二章中描述的完成了任务的话，评测下来应该就都是正确的，大概率不需要看这段介绍。之所以在此特地介绍评测脚本的逻辑，是因为本 lab 的评测脚本逻辑实在比较特殊（关于模拟器的 lab 实在是太难设计自动评测方案了）。所以我们在文档中放了这部分供同学们参考。如果大家在评测时发现评测脚本输出的结果不合理，请大胆在 piazza 上提出或者联系助教。
+> 其实，同学们如果顺利按照第二章中描述的完成了任务的话，评测下来应该就不会有问题，大概率不需要看这段介绍。之所以在此特地介绍评测脚本的逻辑，是因为本 lab 的评测脚本逻辑实在比较特殊（关于模拟器的 lab 实在是太难设计自动评测方案了）。所以我们在文档中放了这部分供同学们参考。如果大家在评测时发现评测脚本输出的结果不合理，请大胆在 piazza 上提出或者联系助教。
 
-我们通过比对【你程序输出的模拟结果】和【我们的标准例程输出的结果】来进行评测，`test/test-utils` 目录下以 "std" 开头的那些文件就是用标准例程输出的结果。考虑到不同机器上运行模拟的结果有可能会存在一些误差，所以我们在进行评测时采取了一些宽松的允许误差的比对方式：
+我们通过比对【你程序输出的模拟结果】和【我们的标准例程输出的结果】来进行评测，`test/test-utils` 目录下以 "std" 开头的那些文件就是用标准例程输出的结果。考虑到运行模拟的结果有可能会存在一些误差，所以我们在进行评测时采取了一些宽松的允许误差的比对方式：
 
 * Exercise 3 (PCAP)：
   我们只会比对 `lv1-0-1.pcap` 和 `lv1-0-2.pcap` 这两个文件与标准答案，比对时，我们会提取出每行的 ack 字段的值进行比对，如果都一致，那么我们就认为你的输出结果是正确的。
@@ -853,4 +854,4 @@ test/test-utils/run_test.sh <ns3_path> <test_name>
 
 我们保证所有的测试样例中的模拟都可以在设定的结束时间（60.0s）之前结束，所以你无需更改代码中的 `stopTime` 。
 
-希望大家做 lab4 做得开心！
+希望大家能借此机会上手网络模拟器！
